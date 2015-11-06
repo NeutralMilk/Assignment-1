@@ -1,3 +1,5 @@
+// A program to analyse the words of a song (or any text file)
+
 void setup()
 {
   size(750,750);
@@ -5,24 +7,37 @@ void setup()
   stroke(0);
   
   ArrayList<String> wordSet = new ArrayList<String>();
-  ArrayList<Float> numSet = new ArrayList<Float>();
+  ArrayList<Integer> numSet = new ArrayList<Integer>();
   
   String[] words = loadStrings("lyrics.txt");
-  //String[] list = split(words,' ');
-  int itemCount = words.size();
+  String[] parts = line.split(" "); //from last years exam question
+  String[] list = split(words, ' '); //from the processing website
   
-  for (int i = 0; i < size; i++) 
+  //move the lyrics into an array list
+  for(int i = 0; i < words.length; i++)
   {
-    String s = (string)words.get(i);
-    s.display();
-  }
-  
-  for(Float s:numSet)
-  {
-    // Add each element from the string array to the arrraylist
-    float f = Float.parseFloat(s);
-    sumData.add(f);
+    String w = words[i];
+    wordSet.add(w);
   }  
+  
+  //For every word create a corresponding number element
+  for(int i = 0; i < words.length; i++)
+  {
+    numSet.add(1);
+  }//end for
+ 
+  //print out the data to check if it works
+  for(int i = 0; i < words.length; i++)
+  {
+    println(wordSet.get(i));    
+  }//end for
+  
+  for(int i = 0; i < words.length; i++)
+  {
+    println(numSet.get(i));    
+  }//end for
+  
+  
 }//end setup
 
 void draw()

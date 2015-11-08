@@ -1,4 +1,5 @@
 // A program to analyse the words of a song (or any text file)
+String[] words;
 
 void setup()
 {
@@ -6,34 +7,15 @@ void setup()
   background(255);
   stroke(0);
   
-  //array list to hold the words
+  //put the contents of the file into an array
+  String[] lyrics = loadStrings("lyrics.txt");  
   
-  String[] words = loadStrings("lyrics.txt");
-  //String[] parts = line.split(" "); //from last years exam question
-  //String[] list = split(words, ' '); //from the processing website
-  
-  for(int i = 0; i < words.length; i++)
+  //for loop to split the words up and put them in a new array
+  for(int i = 0; i < lyrics.length; i++)
   {
-    String[] names = words[i].toLowerCase().replaceAll("\\W", " ").replaceAll(" +", " ").split(" ");
+    words = lyrics[i].toLowerCase().replaceAll(".", " ").replaceAll(",", " ").split(" ");
   }//end for
   
-  Map map = new HashMap();
-  
-  for (int i = 0; i < names.length; i++)
-  {
-    String key = names[i];
-    NameAndNumber nan = (NameAndNumber) map.get(key);
-    if (nan == null)
-    {
-      // New entry
-      map.put(key, new NameAndNumber(key, 1));
-    }
-    else
-    {
-      map.put(key, new NameAndNumber(key, nan.m_number + 1));
-    }
-  }
-  //For every word create a corresponding number
   int[] numSet = new int[words.length];
   for(int i = 0; i < words.length; i++)
   {
@@ -55,7 +37,7 @@ void setup()
     {
       if(words[i] == words[j])
       {
-         numSet[j]++;
+         numSet[i]++;
       }//end if
     }//end inner for
   }//end outer for

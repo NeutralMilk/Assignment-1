@@ -1,6 +1,6 @@
+//Colin White c14509343
 // A program to analyse the words of a song (or any text file)
 String[] words;
-
 void setup()
 {
   size(750,750);
@@ -21,12 +21,6 @@ void setup()
   {
     numSet[i] = 1;
   }//end for
- 
-  //print out the data to check if it works
-  for(int i = 0; i < words.length; i++)
-  {
-    println(words[i]);  
-  }//end for
   
   //for loops to find the frequency of the words
   //outer for loop to choose the word
@@ -41,13 +35,6 @@ void setup()
       }//end if
     }//end inner for
   }//end outer for
-  
-  //print counted words
-  for(int i = 0; i < words.length; i++)
-  {
-    println(numSet[i]);    
-    
-  }//end for
 }//end setup
 
 void draw()

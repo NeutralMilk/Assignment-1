@@ -1,9 +1,12 @@
 //Colin White c14509343
 // A program to analyse the words of a song (or any text file)
+
 String[] words;
+String[] sortedWords;
+
 void setup()
 {
-  size(750,750);
+  size(1000,750);
   background(255);
   stroke(0);
   
@@ -20,33 +23,49 @@ void loadData()
   //for loop to split the words up and put them in a new array
   for(int i = 0; i < lyrics.length; i++)
   {
-    words = lyrics[i].toLowerCase().replaceAll(".", " ").replaceAll(",", " ").split(" ");
+    String[] w = lyrics[i].toLowerCase().replaceAll(".", " ").replaceAll(",", " ").split(" ");
+    words = sort(w);
   }//end for
 }//end loadData()
 
 int[] wordFrequency()
 {
-  int[] freq = new int[words.length];
+  int currentPlace = 0;
+  int j = 0;
+  //find the number of unique words
   for(int i = 0; i < words.length; i++)
   {
-    freq[i] = 1;
-    println(words[i]); 
-  }//end for
-  
-  for(int i = 0; i < words.length; i++)
-  {
-    //inner for loop to compare all words to the word chosen in the outer loop
-    for(int j = 0; j < words.length; j++)
+    if(words[currentPlace] != words[i])
     {
-      if(words[i] == words[j])
-      {
-         freq[i]++;
-      }//end if
-    }//end inner for
-  }//end outer for
+      currentPlace = i;
+      j++;
+      sortedWords[i] = words[i];
+    }//end if
+  }//endfor
   
-  return(freq);
-}//end createNumSet()
+  //create an array the size of the number of unique words
+  int[] numSet = new int[j];
+  currentPlace = 0;
+  j = 0;
+  
+  //compare the words
+  for(int i = 0; i < words.length; i++)
+  {
+    if(words[currentPlace] == words[i])
+    {
+      numSet[j]++;
+    }//end if
+    
+    else
+    {    
+      currentPlace = i;
+      j++;
+    }//end if
+  }//endfor
+  
+  return numSet;
+ 
+}//end wordFrequency()
 
 void drawBarChart(int [] numSet)
 {
@@ -71,18 +90,22 @@ void drawBarChart(int [] numSet)
     }//end if
   }//end for
   
+  //draw the axes
   float border = height*.1f;
   float tick = (border/4);
-  stroke(100);
+  stroke(0);
   line(border-tick, height-border, width-border, height-border);
   line(border, height-border+tick, border,border);
 
-  for(int i = 0; i < 9 ; i++)
+  //draw the bars
+  for(int i = 0; i < numSet.length ; i++)
   {
-    float barWidth = (width *.8f)/10;
+    float barHeight = map(numSet[i], min, max, height-border, border);
+    float barWidth = (width-2*border)/10;
     float x = border+(i* barWidth);
     float y = height-border;
-    rect(x, y, 100, -100);
+  
+    rect(x, y, barWidth, 10);
   }//end for
   
 }//end drawBarChart()

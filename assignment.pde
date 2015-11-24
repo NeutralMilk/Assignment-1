@@ -3,16 +3,16 @@
 
 String[] words;
 String[] sortedWords;
+ArrayList<Integer> numSet = new ArrayList<Integer>();
 
 void setup()
 {
-  size(1000,750);
+  size(900,900);
   background(255);
   stroke(0);
   
   loadData();
-  int[] numSet = wordFrequency();
-  drawBarChart(numSet);
+  
 }//end setup
 
 void loadData()
@@ -23,12 +23,22 @@ void loadData()
   //for loop to split the words up and put them in a new array
   for(int i = 0; i < lyrics.length; i++)
   {
+    //change everything to lowercase, replace full stops and commas with spaces and split at a space
     String[] w = lyrics[i].toLowerCase().replaceAll(".", " ").replaceAll(",", " ").split(" ");
     words = sort(w);
   }//end for
+  
+  for (int i = 0; i < words.length; i++)
+  {
+    numSet.add(i);
+    println(numSet.get(i));
+  }//end for
+  
+  wordFrequency();
+  
 }//end loadData()
 
-int[] wordFrequency()
+void wordFrequency()
 {
   int currentPlace = 0;
   int j = 0;
@@ -44,7 +54,6 @@ int[] wordFrequency()
   }//endfor
   
   //create an array the size of the number of unique words
-  int[] numSet = new int[j];
   currentPlace = 0;
   j = 0;
   
@@ -53,7 +62,7 @@ int[] wordFrequency()
   {
     if(words[currentPlace] == words[i])
     {
-      numSet[j]++;
+      numSet.add(1);
     }//end if
     
     else
@@ -63,11 +72,11 @@ int[] wordFrequency()
     }//end if
   }//endfor
   
-  return numSet;
- 
+  drawBarChart();
+
 }//end wordFrequency()
 
-void drawBarChart(int [] numSet)
+void drawBarChart()
 {
   float max = 0;
   float min = 0;
@@ -75,18 +84,18 @@ void drawBarChart(int [] numSet)
   //find max
   for(int i = 0; i < words.length; i++)
   {
-    if (numSet[i] > max)
+    if (numSet.get(i) > max)
     {
-      max = numSet[i];
+      max = numSet.get(i);
     }//end if
   }//end for
 
   //find min
   for(int i = 0; i < words.length; i++)
   {
-    if (numSet[i] < min)
+    if (numSet.get(i) < min)
     {
-      min = numSet[i];
+      min = numSet.get(i);
     }//end if
   }//end for
   
@@ -98,16 +107,16 @@ void drawBarChart(int [] numSet)
   line(border, height-border+tick, border,border);
 
   //draw the bars
-  for(int i = 0; i < numSet.length ; i++)
+  for(int i = 0; i < numSet.size() ; i++)
   {
-    float barHeight = map(numSet[i], min, max, height-border, border);
-    float barWidth = (width-2*border)/10;
-    float x = border+(i* barWidth);
-    float y = height-border;
+    float barHeight = map(numSet.get(i), min, max, height-border, border);
+    float barWidth = (height-2*border)/10;
+    float x = border;
+    float y = border + (i*barWidth);
   
-    rect(x, y, barWidth, 10);
+    rect(x, y, 100, 100);
   }//end for
-  
+  println("draw bar chart runs");
 }//end drawBarChart()
 void draw()
 {

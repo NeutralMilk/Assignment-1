@@ -348,7 +348,7 @@ void mousePressed()
     }//end for
   }//end if
 
-}//end mousehover()
+}//end mousePressed()
 void loadData()
 {
   
@@ -357,7 +357,7 @@ void loadData()
   {
     //println(lyrics[i]);
     //change everything to lowercase, replace full stops and commas with spaces and split at a space
-    String temp = lyrics[i].toLowerCase().replaceAll("\\.", " ").replaceAll(",", " ").replaceAll("\\?", " ").replaceAll("!", " ").replaceAll("\"", " ");
+    String temp = trim(lyrics[i]).toLowerCase().replaceAll("\\.", "").replaceAll(",", "").replaceAll("\\?", "").replaceAll("!", "").replaceAll("\"", "");
     String[] w = temp.split(" ");
     for(String s:w)
     {
@@ -382,7 +382,7 @@ void wordFrequency()
   int count = 0;
   
   //finding the frequency
-  for(int i = 0 ; i < allWords.size(); i++)
+  for(int i = 0 ; i < allWords.size(); i++) //<>//
   {
     String str1 = allWords.get(currentPlace); 
     String str2 = allWords.get(i); 
@@ -406,7 +406,7 @@ void wordFrequency()
       count = 0;
       i--;
     }//end else
-  }//endfor
+  }//endfor //<>//
   
   if(uniqueWords.get(0).equals(""))
   {
@@ -424,7 +424,12 @@ void wordFrequency()
   {
     //println(uniqueWords.get(i) + " occurs " + numSet.get(i) + " times");
   }//end for
-
+  
+  for(int i = 0; i < numSet.size(); i ++)
+  {
+    println(numSet.get(i) + uniqueWords.get(i));
+    println(" before sort \n");
+  }//end for
   sortNumbers();
 
 }//end wordFrequency()
@@ -442,6 +447,8 @@ void sortNumbers()
     }//end if
   }//end for
   
+  println(max);
+  
   //put numSet into  sorting.
   int sortedNumSet[] = new int[numSet.size()];
   for(int i = 0; i < numSet.size(); i++)
@@ -456,23 +463,25 @@ void sortNumbers()
     sortedUnique[i] = uniqueWords.get(i);
   }//end for
   
-  //bubble sort
-  for (int i = 0 ; i < numSet.size() - 1 ; i++)
+  //insertion sort to sort them by numerical order, largest to smallest
+  int j;
+  for (int i = 1 ; i <= numSet.size() - 1; i++) 
   {
-    for (int j = 0 ; j < numSet.size() - i - 1; j++)
+    j = i;
+ 
+    while (j > 0 && sortedNumSet[j] > sortedNumSet[j-1]) 
     {
-      if (sortedNumSet[j] < sortedNumSet[j+1]) /* For decreasing order use < */
-      {
-        String swapWord = sortedUnique[i];
-        sortedUnique[j]   = sortedUnique[j+1];
-        sortedUnique[j+1] = swapWord;
-        
-        int swapNum = sortedNumSet[j];
-        sortedNumSet[j]   = sortedNumSet[j+1];
-        sortedNumSet[j+1] = swapNum;
-      }//end if
-    }//end for
-  }//end for
+      String swapWord = sortedUnique[j];
+      sortedUnique[j] = sortedUnique[j-1];
+      sortedUnique[j-1] = swapWord;
+      
+      int swapNum = sortedNumSet[j];
+      sortedNumSet[j]   = sortedNumSet[j-1];
+      sortedNumSet[j-1] = swapNum;
+ 
+      j--;
+    }
+  }
   
   //remove everything from the number and word array so they can be filled with the completely sorted versions
   numSet.clear();
@@ -484,8 +493,15 @@ void sortNumbers()
     numSet.add(sortedNumSet[i]);
     uniqueWords.add(sortedUnique[i]);
   }//end for
+  
+  for(int i = 0; i < numSet.size(); i ++)
+  {
+    println(numSet.get(i) + uniqueWords.get(i));
+    println("after sortll\n");
+  }//end for
   drawBarChart();
-
+  
+  
 }//end sortNumbers
 
 void drawBarChart()
@@ -506,8 +522,8 @@ void drawBarChart()
   line(border, height-border+tick + globalY + offset, border,border + globalY + offset);//y axis
   line(width-border, height-border + globalY + offset, width - border, height - border + tick + globalY + offset);//end mark
    //<>//
-  text("0", border, height - border + tick + globalY + offset);
-  text(max, width - border, height - border + tick + globalY + offset);
+  text("0", border*.935, height - border + tick*2 + globalY + offset);
+  text(max, width - border*1.1, height - border + tick*2 + globalY + offset);
   
   //draw the bars //<>//
   for(int i = 0; i < 25 ; i++)
@@ -574,14 +590,14 @@ void drawWordCloud()
   {
     for(int i = 0; i < 25; i++)
     {
-      float tSize = map(numSet.get(i), 1, max, 35, 350);
+      float tSize = map(numSet.get(i), 1, max, 30, 300);
       textSize(tSize);
       x = centX + sin(theta + offset) * bigRadius;
       y = centY -cos(theta + offset) * bigRadius + yOffset;
       fill(0);
       stroke(0);
       fill(colourArray[i]);
-      text(uniqueWords.get(i), x, y);
+      ellipse(x, y, tSize, tSize);
       bigRadius += 10f;
       offset += 1f;
     }//end for      

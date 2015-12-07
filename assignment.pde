@@ -17,6 +17,7 @@ color[] colourArray = new color[25];
 ArrayList<Integer> numSet = new ArrayList<Integer>();
 ArrayList<String> allWords = new ArrayList<String>();
 ArrayList<String> uniqueWords = new ArrayList<String>();
+boolean drawWords = false;
 
 //make the image variables
 PImage itaots;
@@ -66,7 +67,13 @@ void setup()
 
 void draw()
 {  
-  menu();
+  if(drawWords == true)
+  {
+    loadData();
+  }//end if
+  
+  menu(); 
+  
   if(pressed == 1)
    {
      if( globalY != - height)
@@ -238,6 +245,7 @@ void keyPressed()
   if (key == 'm') 
     {
       m = 1;
+      drawWords = false;
     }//end if
   
 }//end keyPressed()
@@ -355,7 +363,6 @@ void loadData()
   //for loop to split the words up and put them in a new array
   for(int i = 0; i < lyrics.length; i++)
   {
-    //println(lyrics[i]);
     //change everything to lowercase, replace full stops and commas with spaces and split at a space
     String temp = trim(lyrics[i]).toLowerCase().replaceAll("\\.", "").replaceAll(",", "").replaceAll("\\?", "").replaceAll("!", "").replaceAll("\"", "");
     String[] w = temp.split(" ");
@@ -365,10 +372,7 @@ void loadData()
     }
   }//end for
   java.util.Collections.sort(allWords);
-  for (int i = 0; i < allWords.size(); i++)
-  {
-    totalWords++;
-  }//end for
+  totalWords = allWords.size();
   
   wordFrequency();
   
@@ -376,9 +380,7 @@ void loadData()
 
 void wordFrequency()
 {
-  int currentPlace = 0;
-  println("uniqueWords is " + uniqueWords.size());
-  
+  int currentPlace = 0;  
   int count = 0;
   
   //finding the frequency
@@ -415,21 +417,6 @@ void wordFrequency()
     numSet.remove(0);
   }//end if  
   
-  println("totalWords" + totalWords);
-  println("uniqueWords is now " + uniqueWords.size());
-  println("allWords is " + allWords.size());
-  println("numSet is " + numSet.size());
-  
-  for(int i = 0; i< numSet.size(); i++)
-  {
-    //println(uniqueWords.get(i) + " occurs " + numSet.get(i) + " times");
-  }//end for
-  
-  for(int i = 0; i < numSet.size(); i ++)
-  {
-    println(numSet.get(i) + uniqueWords.get(i));
-    println(" before sort \n");
-  }//end for
   sortNumbers();
 
 }//end wordFrequency()
@@ -446,9 +433,7 @@ void sortNumbers()
       max = numSet.get(i);
     }//end if
   }//end for
-  
-  println(max);
-  
+    
   //put numSet into  sorting.
   int sortedNumSet[] = new int[numSet.size()];
   for(int i = 0; i < numSet.size(); i++)
@@ -463,7 +448,7 @@ void sortNumbers()
     sortedUnique[i] = uniqueWords.get(i);
   }//end for
   
-  //insertion sort to sort them by numerical order, largest to smallest
+  //insertion sort to sort them by numerical order, largest to smallest. this allows me to sort them together and keep the number and word paired.
   int j;
   for (int i = 1 ; i <= numSet.size() - 1; i++) 
   {
@@ -480,8 +465,8 @@ void sortNumbers()
       sortedNumSet[j-1] = swapNum;
  
       j--;
-    }
-  }
+    }//end while()
+  }//end for()
   
   //remove everything from the number and word array so they can be filled with the completely sorted versions
   numSet.clear();
@@ -493,12 +478,7 @@ void sortNumbers()
     numSet.add(sortedNumSet[i]);
     uniqueWords.add(sortedUnique[i]);
   }//end for
-  
-  for(int i = 0; i < numSet.size(); i ++)
-  {
-    println(numSet.get(i) + uniqueWords.get(i));
-    println("after sortll\n");
-  }//end for
+
   drawBarChart();
   
   
@@ -521,6 +501,7 @@ void drawBarChart()
   line(border-tick, height-border + globalY + offset, width-border, height-border + globalY + offset);//x axis
   line(border, height-border+tick + globalY + offset, border,border + globalY + offset);//y axis
   line(width-border, height-border + globalY + offset, width - border, height - border + tick + globalY + offset);//end mark
+  
    //<>//
   text("0", border*.935, height - border + tick*2 + globalY + offset);
   text(max, width - border*1.1, height - border + tick*2 + globalY + offset);
@@ -559,13 +540,15 @@ void drawBarChart()
   popMatrix();
   text("Word frequency", width/2.25, height-(border/2) + globalY + offset);
 
-  drawWordCloud();
+  drawWords();
 }//end drawBarChart()
 
-void drawWordCloud()
+void drawWords()
 {
-  float max = 0;
-  float min = 0;
+  float max = 0;  
+  float border = width* .01;
+  float offset = height*2;
+  
   //find max
   for(int i = 0; i < numSet.size(); i++)
   {
@@ -575,34 +558,33 @@ void drawWordCloud()
     }//end if
   }//end for
   
-  float yOffset = 2*height + globalY;
-  float centX = width/3;
-  float centY = height/2;
-  
-
-  float x;
-  float y;
-  float offset = 0.0f; // Offset each iteration by this
- 
-  float bigRadius = 100;
-  float smallRadius = 2;
-  for (float theta = 0 ; theta < TWO_PI ; theta += TWO_PI)
+  for (int i = 0; i < 25; i++)
   {
-    for(int i = 0; i < 25; i++)
+    fill(colourArray[i]);
+    rect(i*64, height-30 + offset + globalY, 64, 30);
+  }//end for
+  
+  if ((mouseY > height/2) && (mouseY < height))
+  {  
+    if(globalY == -height*2)
     {
-      float tSize = map(numSet.get(i), 1, max, 30, 300);
-      textSize(tSize);
-      x = centX + sin(theta + offset) * bigRadius;
-      y = centY -cos(theta + offset) * bigRadius + yOffset;
-      fill(0);
-      stroke(0);
+      int i = mouseX / (int) 64;    
+      float size = map(numSet.get(i), 0, max, 15, 300);
+      textSize(size);
+      textAlign(CENTER);
       fill(colourArray[i]);
-      ellipse(x, y, tSize, tSize);
-      bigRadius += 10f;
-      offset += 1f;
-    }//end for      
- } 
-     
+      text(uniqueWords.get(i),width/2, height/2 + offset + globalY);
+      textSize(height/30);
+      fill(0);
+      text(numSet.get(i),width/2, height*.66 + offset + globalY);
+      textAlign(LEFT);
+      line(mouseX, mouseY, 32+(i*64), height -30);
+    }
+  }
+
+  
+  drawWords = true;
+  
   uniqueWords.clear();
   numSet.clear();
   allWords.clear();

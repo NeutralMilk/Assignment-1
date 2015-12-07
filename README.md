@@ -8,7 +8,7 @@ I chose song lyrics as my data set because I thought it would be interesting to 
 
 To use the program click on one of the songs in the menu. The song chosen plays in the background using the minim library.
 
-Use the up and down arrow keys to switch between the bar chart and the word cloud.
+Use the up and down arrow keys to switch between the bar chart and the word display.
 Press 'm' to return to the menu at any time.
 
 You can resize it if you want, but keep the width two times the height, (1000,500) for example. I think (1600,900) works the best for a 1080p screen.

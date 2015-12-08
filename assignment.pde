@@ -564,7 +564,7 @@ void drawWords()
     rect(i*(width*.04), height-(width*.02) + offset + globalY, width*.04, width*.02);
   }//end for()
   
-  if ((mouseY > height/2) && (mouseY < height))
+  if ((mouseY > height/2) && (mouseY < height - (width*.02)))
   {  
     if(globalY == -height*2)
     {

@@ -561,14 +561,14 @@ void drawWords()
   for (int i = 0; i < 25; i++)
   {
     fill(colourArray[i]);
-    rect(i*64, height-30 + offset + globalY, 64, 30);
+    rect(i*(width*.04), height-(width*.02) + offset + globalY, width*.04, width*.02);
   }//end for
   
   if ((mouseY > height/2) && (mouseY < height))
   {  
     if(globalY == -height*2)
     {
-      int i = mouseX / (int) 64;    
+      int i = mouseX / (int) (width*.04);    
       float size = map(numSet.get(i), 0, max, 15, 300);
       textSize(size);
       textAlign(CENTER);
@@ -578,7 +578,7 @@ void drawWords()
       fill(0);
       text(numSet.get(i),width/2, height*.66 + offset + globalY);
       textAlign(LEFT);
-      line(mouseX, mouseY, 32+(i*64), height -30);
+      line(mouseX, mouseY, width*.02+(i*width*.04), height -(width*.02));
     }
   }
 

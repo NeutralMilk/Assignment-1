@@ -564,7 +564,7 @@ void drawWords()
     rect(i*(width*.04), height-(width*.02) + offset + globalY, width*.04, width*.02);
   }//end for()
   
-  if ((mouseY > height/2) && (mouseY < height - (width*.02)))
+  if ((mouseY > height/2) && (mouseY < height))
   {  
     if(globalY == -height*2)
     {
@@ -578,7 +578,10 @@ void drawWords()
       fill(0);
       text(numSet.get(i),width/2, height*.66 + offset + globalY);
       textAlign(LEFT);
-      line(mouseX, mouseY, width*.02+(i*width*.04), height -(width*.02));
+      if ((mouseY > height/2) && (mouseY < height - (width*.02)))
+      {
+        line(mouseX, mouseY, width*.02+(i*width*.04), height -(width*.02));
+      }//end if()
     }//end if()
   }//end for()
 

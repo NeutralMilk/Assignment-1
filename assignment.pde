@@ -556,13 +556,13 @@ void drawWords()
     {
       max = numSet.get(i);
     }//end if
-  }//end for
+  }//end for()
   
   for (int i = 0; i < 25; i++)
   {
     fill(colourArray[i]);
     rect(i*(width*.04), height-(width*.02) + offset + globalY, width*.04, width*.02);
-  }//end for
+  }//end for()
   
   if ((mouseY > height/2) && (mouseY < height))
   {  
@@ -579,8 +579,8 @@ void drawWords()
       text(numSet.get(i),width/2, height*.66 + offset + globalY);
       textAlign(LEFT);
       line(mouseX, mouseY, width*.02+(i*width*.04), height -(width*.02));
-    }
-  }
+    }//end if()
+  }//end for()
 
   
   drawWords = true;
